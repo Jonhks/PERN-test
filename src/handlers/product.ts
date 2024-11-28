@@ -18,7 +18,7 @@ export const getProductsById = async (req: Request, res: Response) => {
     const product = await Product.findByPk(id);
 
     if (!product) {
-      res.status(400).json({
+      res.status(404).json({
         error: "Producto no encontrado",
       });
       return;
@@ -32,7 +32,7 @@ export const getProductsById = async (req: Request, res: Response) => {
 export const createProduct = async (req: Request, res: Response) => {
   try {
     const product = await Product.create(req.body);
-    res.json({ data: product });
+    res.status(201).json({ data: product });
   } catch (error) {
     console.log(error);
   }

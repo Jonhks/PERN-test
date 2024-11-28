@@ -1,9 +1,18 @@
-describe("Nuestro primer test", () => {
-  it("Debe revisar que 1 + 1 sean 2", () => {
-    expect(1 + 1).toBe(2);
-  });
+import { connectDB } from "../server";
+import db from "../config/db";
 
-  it("Debe revisar que 1 + 1 NO sean 3", () => {
-    expect(1 + 1).not.toBe(10);
+jest.mock("../config/db");
+
+describe("connect db", () => {
+  it("should handle database conection error", async () => {
+    jest
+      .spyOn(db, "authenticate")
+      .mockRejectedValueOnce(new Error("Error al conectar la base de datos"));
+    const consoleSpy = jest.spyOn(console, "log");
+    await connectDB();
+
+    expect(consoleSpy).toHaveBeenCalledWith(
+      expect.stringContaining("Error al conectar la base de datos")
+    );
   });
 });
